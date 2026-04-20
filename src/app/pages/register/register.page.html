@@ -1,13 +1,65 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="register-content">
+  <div class="register-container">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <div class="register-header">
+      <ion-button fill="clear" (click)="goToLogin()" class="back-btn">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+      <h1>Crear Cuenta</h1>
+      <p>Completa todos los campos</p>
+    </div>
+
+    <div class="register-form">
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input placeholder="Nombre" [(ngModel)]="nombre"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input placeholder="Apellido" [(ngModel)]="apellido"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="card-outline" slot="start"></ion-icon>
+        <ion-select placeholder="Tipo de documento" [(ngModel)]="tipoDocumento">
+          <ion-select-option value="CC">Cédula de Ciudadanía</ion-select-option>
+          <ion-select-option value="CE">Cédula Extranjería</ion-select-option>
+          <ion-select-option value="PA">Pasaporte</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="document-outline" slot="start"></ion-icon>
+        <ion-input placeholder="Número de documento" [(ngModel)]="numeroDocumento" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="globe-outline" slot="start"></ion-icon>
+        <ion-input placeholder="País" [(ngModel)]="pais"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input placeholder="Correo electrónico" [(ngModel)]="email" type="email"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input placeholder="Contraseña (mín. 6 caracteres)" [(ngModel)]="password" type="password"></ion-input>
+      </ion-item>
+
+      <div class="error-msg" *ngIf="errorMsg">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ errorMsg }}
+      </div>
+
+      <ion-button expand="block" class="register-btn" (click)="register()" [disabled]="loading">
+        <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+        <span *ngIf="!loading">Crear Cuenta</span>
+      </ion-button>
+
+    </div>
+  </div>
 </ion-content>
