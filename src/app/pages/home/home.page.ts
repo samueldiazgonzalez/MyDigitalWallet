@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/core/services/auth';
+import { of, switchMap } from 'rxjs';
+import { CardService } from '../../core/services/card';
 
 @Component({
   selector: 'app-home',
@@ -14,24 +17,33 @@ export class HomePage implements OnInit {
   saldo = 0;
   mostrarSaldo = true;
   tarjetas: any[] = [];
-  transacciones: any[] = [];
   uid = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    private firestore: AngularFirestore,
+    private cardService: CardService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.authService.getUser().subscribe(user => {
-      if (!user) {
-        this.router.navigate(['/login']);
-        return;
-      }
-      this.uid = user.uid;
-      this.authService.getUserProfile(user.uid).subscribe((perfil: any) => {
-        if (perfil) {
-          this.userName = perfil.nombre;
-          this.saldo = perfil.saldo || 0;
+    this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (!user) {
+          this.router.navigate(['/login']);
+          return of(null);
         }
-      });
+        this.uid = user.uid;
+        this.cardService.obtenerTarjetas(user.uid).subscribe(t => {
+          this.tarjetas = t;
+        });
+        return this.firestore.collection('users').doc(user.uid).valueChanges();
+      })
+    ).subscribe((perfil: any) => {
+      if (perfil) {
+        this.userName = perfil.nombre || '';
+        this.saldo = perfil.saldo || 0;
+      }
     });
   }
 
@@ -48,6 +60,7 @@ export class HomePage implements OnInit {
   }
 
   async logout() {
-    await this.authService.logout();
+    await this.afAuth.signOut();
+    this.router.navigate(['/login']);
   }
 }

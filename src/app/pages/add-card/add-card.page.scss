@@ -1,0 +1,151 @@
+.add-card-content {
+  --background: #f0f2f5;
+}
+
+.add-card-container {
+  padding: 16px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  .back-btn {
+    --color: #1a1a2e;
+    margin-left: -8px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 8px 0 4px;
+  }
+
+  p {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.card-preview {
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #1a1a2e, #0f3460);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+
+  &.visa {
+    background: linear-gradient(135deg, #1a1a6e, #0f3480);
+  }
+
+  &.mastercard {
+    background: linear-gradient(135deg, #6e1a1a, #c0392b);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .card-bank {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    .chip-icon {
+      color: white;
+      font-size: 20px;
+    }
+  }
+
+  .card-number {
+    color: white;
+    font-size: 20px;
+    letter-spacing: 3px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .card-label {
+      display: block;
+      color: rgba(255,255,255,0.6);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .card-value {
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .visa-logo {
+      color: white;
+      font-size: 22px;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .mc-logo {
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+}
+
+.form-section {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.input-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  --background: transparent;
+
+  ion-icon {
+    color: #888;
+    margin-right: 8px;
+  }
+}
+
+.row-inputs {
+  display: flex;
+  gap: 12px;
+
+  .half {
+    flex: 1;
+  }
+}
+
+.error-msg {
+  color: #e94560;
+  font-size: 13px;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.save-btn {
+  --background: #e94560;
+  --border-radius: 12px;
+  margin-top: 16px;
+  height: 50px;
+  font-weight: 600;
+}

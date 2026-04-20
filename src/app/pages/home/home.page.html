@@ -1,13 +1,72 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-title>MyDigitalWallet</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="home-content">
+
+  <div class="balance-card">
+    <div class="balance-header">
+      <span>Saldo Total</span>
+      <ion-button fill="clear" (click)="toggleSaldo()">
+        <ion-icon [name]="mostrarSaldo ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+      </ion-button>
+    </div>
+    <h2 class="balance-amount">
+      {{ mostrarSaldo ? ('$' + saldo.toLocaleString()) : '••••••' }}
+    </h2>
+    <p class="welcome-text">Hola, {{ userName }} 👋</p>
+  </div>
+
+  <div class="quick-actions">
+    <div class="action-btn" (click)="goToAddCard()">
+      <div class="action-icon">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </div>
+      <span>Agregar tarjeta</span>
+    </div>
+    <div class="action-btn" (click)="goToPayment()">
+      <div class="action-icon">
+        <ion-icon name="send-outline"></ion-icon>
+      </div>
+      <span>Pagar</span>
+    </div>
+    <div class="action-btn">
+      <div class="action-icon">
+        <ion-icon name="arrow-down-circle-outline"></ion-icon>
+      </div>
+      <span>Recargar</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h3>Mis Tarjetas</h3>
+      <ion-button fill="clear" size="small" (click)="goToAddCard()">+ Agregar</ion-button>
+    </div>
+
+    <div class="empty-state" *ngIf="tarjetas.length === 0">
+      <ion-icon name="card-outline"></ion-icon>
+      <p>No tienes tarjetas aún</p>
+      <ion-button size="small" (click)="goToAddCard()">Agregar tarjeta</ion-button>
+    </div>
+
+    <div class="card-list" *ngIf="tarjetas.length > 0">
+      <div class="mini-card" *ngFor="let card of tarjetas" [ngClass]="card.franquicia">
+        <div class="mini-card-top">
+          <span>{{ card.franquicia | uppercase }}</span>
+          <ion-icon name="card-outline"></ion-icon>
+        </div>
+        <div class="mini-card-number">•••• {{ card.numero.slice(-4) }}</div>
+        <div class="mini-card-holder">{{ card.titular }}</div>
+      </div>
+    </div>
+  </div>
+
 </ion-content>

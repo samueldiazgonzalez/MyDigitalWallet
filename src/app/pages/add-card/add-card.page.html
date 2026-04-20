@@ -1,13 +1,93 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>add-card</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="add-card-content">
+  <div class="add-card-container">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">add-card</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <div class="page-header">
+      <ion-button fill="clear" (click)="goBack()" class="back-btn">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+      <h1>Agregar Tarjeta</h1>
+      <p>Ingresa los datos de tu tarjeta</p>
+    </div>
+
+    <!-- Preview de la tarjeta -->
+    <div class="card-preview" [ngClass]="franquicia">
+      <div class="card-top">
+        <span class="card-bank">MyDigitalWallet</span>
+        <ion-icon name="wifi-outline" class="chip-icon"></ion-icon>
+      </div>
+      <div class="card-number">
+        {{ numero || '•••• •••• •••• ••••' }}
+      </div>
+      <div class="card-bottom">
+        <div>
+          <span class="card-label">Titular</span>
+          <span class="card-value">{{ titular || 'NOMBRE APELLIDO' }}</span>
+        </div>
+        <div>
+          <span class="card-label">Expira</span>
+          <span class="card-value">{{ expiracion || 'MM/YY' }}</span>
+        </div>
+        <div class="franchise-logo">
+          <span *ngIf="franquicia === 'visa'" class="visa-logo">VISA</span>
+          <span *ngIf="franquicia === 'mastercard'" class="mc-logo">MC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-section">
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="card-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Número de tarjeta"
+          [(ngModel)]="numero"
+          (ionInput)="onNumeroChange()"
+          maxlength="19"
+          type="tel">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input-item">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input
+          placeholder="Nombre del titular"
+          [(ngModel)]="titular"
+          [style.text-transform]="'uppercase'">
+        </ion-input>
+      </ion-item>
+
+      <div class="row-inputs">
+        <ion-item lines="none" class="input-item half">
+          <ion-input
+            placeholder="MM/YY"
+            [(ngModel)]="expiracion"
+            (ionInput)="onExpiracionChange()"
+            maxlength="5"
+            type="tel">
+          </ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="input-item half">
+          <ion-input
+            placeholder="CVV"
+            [(ngModel)]="cvv"
+            maxlength="4"
+            type="password">
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <div class="error-msg" *ngIf="errorMsg">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        {{ errorMsg }}
+      </div>
+
+      <ion-button expand="block" class="save-btn" (click)="guardarTarjeta()" [disabled]="loading">
+        <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+        <span *ngIf="!loading">Guardar Tarjeta</span>
+      </ion-button>
+
+    </div>
+  </div>
 </ion-content>

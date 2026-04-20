@@ -1,0 +1,146 @@
+.payment-content {
+  --background: #f0f2f5;
+}
+
+.payment-container {
+  padding: 16px;
+}
+
+.merchant-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+  .merchant-icon {
+    width: 56px;
+    height: 56px;
+    background: #f0f2f5;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+      font-size: 28px;
+      color: #e94560;
+    }
+  }
+
+  .merchant-info {
+    flex: 1;
+
+    .merchant-label {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+    }
+
+    .merchant-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin: 2px 0;
+    }
+
+    .merchant-amount {
+      font-size: 22px;
+      font-weight: 700;
+      color: #e94560;
+    }
+  }
+
+  .refresh-btn {
+    --color: #888;
+  }
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+}
+
+.cards-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.selector-card {
+  border-radius: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #1a1a2e, #0f3460);
+  color: white;
+  position: relative;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+
+  &.selected {
+    opacity: 1;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+
+  &.visa {
+    background: linear-gradient(135deg, #1a1a6e, #0f3480);
+  }
+
+  &.mastercard {
+    background: linear-gradient(135deg, #6e1a1a, #c0392b);
+  }
+
+  .selector-card-number {
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .selector-card-holder {
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  .check-icon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+    color: #4cff91;
+  }
+}
+
+.success-msg {
+  background: rgba(29,158,117,0.1);
+  color: #1D9E75;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.error-msg {
+  color: #e94560;
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pay-btn {
+  --background: #e94560;
+  --border-radius: 12px;
+  height: 56px;
+  font-size: 16px;
+  font-weight: 600;
+}

@@ -1,13 +1,80 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>payment</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Realizar Pago</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">payment</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="payment-content">
+  <div class="payment-container">
+
+    <!-- Simulación del comercio -->
+    <div class="merchant-card">
+      <div class="merchant-icon">
+        <ion-icon name="storefront-outline"></ion-icon>
+      </div>
+      <div class="merchant-info">
+        <span class="merchant-label">Comercio</span>
+        <h2 class="merchant-name">{{ merchant }}</h2>
+        <span class="merchant-amount">${{ amount.toLocaleString() }}</span>
+      </div>
+      <ion-button fill="clear" (click)="generarSimulacion()" class="refresh-btn">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Selección de tarjeta -->
+    <div class="section-title">Selecciona una tarjeta</div>
+
+    <div class="empty-state" *ngIf="tarjetas.length === 0">
+      <ion-icon name="card-outline"></ion-icon>
+      <p>No tienes tarjetas registradas</p>
+      <ion-button size="small" routerLink="/add-card">Agregar tarjeta</ion-button>
+    </div>
+
+    <div class="cards-selector" *ngIf="tarjetas.length > 0">
+      <div
+        class="selector-card"
+        *ngFor="let card of tarjetas"
+        [ngClass]="[card.franquicia, tarjetaSeleccionada?.id === card.id ? 'selected' : '']"
+        (click)="tarjetaSeleccionada = card">
+        <div class="selector-card-number">•••• {{ card.numero.slice(-4) }}</div>
+        <div class="selector-card-holder">{{ card.titular }}</div>
+        <ion-icon
+          name="checkmark-circle"
+          class="check-icon"
+          *ngIf="tarjetaSeleccionada?.id === card.id">
+        </ion-icon>
+      </div>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="success-msg" *ngIf="successMsg">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      {{ successMsg }}
+    </div>
+
+    <div class="error-msg" *ngIf="errorMsg">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      {{ errorMsg }}
+    </div>
+
+    <!-- Botón pagar -->
+    <ion-button
+      expand="block"
+      class="pay-btn"
+      (click)="realizarPago()"
+      [disabled]="loading || tarjetas.length === 0">
+      <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+      <span *ngIf="!loading">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        Pagar ${{ amount.toLocaleString() }}
+      </span>
+    </ion-button>
+
+  </div>
 </ion-content>
