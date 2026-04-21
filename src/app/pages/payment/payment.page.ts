@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CardService } from '../../core/services/card';
-import { PaymentService } from '../../core/services/payment';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { faker } from '@faker-js/faker';
+import { ToastService } from '../../core/services/toast';
 
 @Component({
   selector: 'app-payment',
@@ -22,26 +22,33 @@ export class PaymentPage implements OnInit {
   successMsg = '';
   uid = '';
 
+  private db: any;
+
   constructor(
-    private cardService: CardService,
-    private paymentService: PaymentService,
     private afAuth: AngularFireAuth,
+    private firestore: AngularFirestore,
+    private toast: ToastService,
     private router: Router
-  ) {}
+  ) {
+    this.db = this.firestore.firestore;
+  }
 
   ngOnInit() {
-    this.afAuth.authState.subscribe(user => {
+    this.afAuth.authState.subscribe(async user => {
       if (!user) {
         this.router.navigate(['/login']);
         return;
       }
       this.uid = user.uid;
-      this.cardService.obtenerTarjetas(user.uid).subscribe(tarjetas => {
-        this.tarjetas = tarjetas;
-        if (tarjetas.length > 0) {
-          this.tarjetaSeleccionada = tarjetas[0];
-        }
-      });
+
+      this.db.collection('cards')
+        .where('uid', '==', user.uid)
+        .onSnapshot((snap: any) => {
+          this.tarjetas = snap.docs.map((d: any) => ({ id: d.id, ...d.data() }));
+          if (this.tarjetas.length > 0 && !this.tarjetaSeleccionada) {
+            this.tarjetaSeleccionada = this.tarjetas[0];
+          }
+        });
     });
     this.generarSimulacion();
   }
@@ -60,16 +67,18 @@ export class PaymentPage implements OnInit {
     this.errorMsg = '';
     this.successMsg = '';
     try {
-      await this.paymentService.realizarPago(
-        this.tarjetaSeleccionada.id,
-        this.merchant,
-        this.amount
-      );
-      this.successMsg = `Pago de $${this.amount.toLocaleString()} realizado exitosamente`;
-      setTimeout(() => {
-        this.generarSimulacion();
-        this.successMsg = '';
-      }, 2000);
+      await this.db.collection('transactions').add({
+        cardId: this.tarjetaSeleccionada.id,
+        merchant: this.merchant,
+        amount: this.amount,
+        date: new Date(),
+        uid: this.uid,
+        emoji: ''
+      });
+      await this.toast.showSuccess(
+  `Pago de $${this.amount.toLocaleString()} realizado exitosamente`
+);
+this.generarSimulacion();
     } catch (error) {
       this.errorMsg = 'Error al procesar el pago';
     } finally {

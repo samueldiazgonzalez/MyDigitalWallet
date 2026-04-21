@@ -12,7 +12,6 @@ export class AuthService {
     private router: Router
   ) {}
 
-  // Registro con email y contraseña
   async signUp(email: string, password: string, userData: {
     nombre: string;
     apellido: string;
@@ -22,33 +21,38 @@ export class AuthService {
   }) {
     const credential = await this.afAuth.createUserWithEmailAndPassword(email, password);
     const uid = credential.user?.uid;
-    await this.firestore.collection('users').doc(uid).set({
-      ...userData,
-      email,
-      biometricEnabled: false,
-      saldo: 0,
-      createdAt: new Date()
-    });
+    if (!uid) throw new Error('No se pudo obtener el UID');
+    
+    await this.firestore.firestore
+      .collection('users')
+      .doc(uid)
+      .set({
+        nombre: userData.nombre,
+        apellido: userData.apellido,
+        tipoDocumento: userData.tipoDocumento,
+        numeroDocumento: userData.numeroDocumento,
+        pais: userData.pais,
+        email: email,
+        biometricEnabled: false,
+        saldo: 0,
+        createdAt: new Date()
+      });
     return credential;
   }
 
-  // Login con email
   login(email: string, password: string) {
     return this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  // Logout
   async logout() {
     await this.afAuth.signOut();
     this.router.navigate(['/login']);
   }
 
-  // Obtener usuario actual como observable
   getUser() {
     return this.afAuth.authState;
   }
 
-  // Obtener perfil desde Firestore
   getUserProfile(uid: string) {
     return this.firestore.collection('users').doc(uid).valueChanges();
   }

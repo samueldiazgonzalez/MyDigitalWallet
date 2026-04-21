@@ -39,12 +39,18 @@ export class CardService {
   }
 
   detectarFranquicia(numero: string): 'visa' | 'mastercard' | 'unknown' {
-    const digits = numero.replace(/\s/g, '');
-    if (digits.startsWith('4')) return 'visa';
-    const bin = parseInt(digits.substring(0, 4));
-    if ((bin >= 51 && bin <= 55) || (bin >= 2221 && bin <= 2720)) return 'mastercard';
-    return 'unknown';
+  const digits = numero.replace(/\s/g, '');
+  if (digits.startsWith('4')) return 'visa';
+  if (digits.length >= 2) {
+    const bin2 = parseInt(digits.substring(0, 2));
+    if (bin2 >= 51 && bin2 <= 55) return 'mastercard';
   }
+  if (digits.length >= 4) {
+    const bin4 = parseInt(digits.substring(0, 4));
+    if (bin4 >= 2221 && bin4 <= 2720) return 'mastercard';
+  }
+  return 'unknown';
+}
 
   formatearNumero(numero: string): string {
     const digits = numero.replace(/\D/g, '');
@@ -52,20 +58,21 @@ export class CardService {
   }
 
   async agregarTarjeta(card: Omit<Card, 'uid' | 'createdAt'>) {
-    const user = await this.afAuth.currentUser;
-    if (!user) throw new Error('No hay usuario autenticado');
-    return this.firestore.collection('cards').add({
-      ...card,
-      uid: user.uid,
-      createdAt: new Date()
-    });
-  }
+  const user = await this.afAuth.currentUser;
+  if (!user) throw new Error('No hay usuario autenticado');
+  
+  await this.firestore.firestore.collection('cards').add({
+    ...card,
+    uid: user.uid,
+    createdAt: new Date()
+  });
+}
 
-  obtenerTarjetas(uid: string) {
-    return this.firestore.collection('cards', ref =>
-      ref.where('uid', '==', uid).orderBy('createdAt', 'desc')
-    ).valueChanges({ idField: 'id' });
-  }
+obtenerTarjetas(uid: string) {
+  return this.firestore.collection('cards', ref =>
+    ref.where('uid', '==', uid).orderBy('createdAt', 'desc')
+  ).valueChanges({ idField: 'id' });
+}
 
   eliminarTarjeta(id: string) {
     return this.firestore.collection('cards').doc(id).delete();

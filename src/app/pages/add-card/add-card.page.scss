@@ -39,30 +39,14 @@
   background: linear-gradient(135deg, #1a1a2e, #0f3460);
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 
-  &.visa {
-    background: linear-gradient(135deg, #1a1a6e, #0f3480);
-  }
-
-  &.mastercard {
-    background: linear-gradient(135deg, #6e1a1a, #c0392b);
-  }
+  &.visa { background: linear-gradient(135deg, #1a1a6e, #0f3480); }
+  &.mastercard { background: linear-gradient(135deg, #6e1a1a, #c0392b); }
 
   .card-top {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-
-    .card-bank {
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-      opacity: 0.9;
-    }
-
-    .chip-icon {
-      color: white;
-      font-size: 20px;
-    }
+    .card-bank { color: white; font-size: 14px; font-weight: 600; }
+    .chip-icon { color: white; font-size: 20px; }
   }
 
   .card-number {
@@ -77,32 +61,10 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-
-    .card-label {
-      display: block;
-      color: rgba(255,255,255,0.6);
-      font-size: 10px;
-      text-transform: uppercase;
-    }
-
-    .card-value {
-      color: white;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .visa-logo {
-      color: white;
-      font-size: 22px;
-      font-style: italic;
-      font-weight: 700;
-    }
-
-    .mc-logo {
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
-    }
+    .card-label { display: block; color: rgba(255,255,255,0.6); font-size: 10px; text-transform: uppercase; }
+    .card-value { color: white; font-size: 13px; font-weight: 500; }
+    .visa-logo { color: white; font-size: 22px; font-style: italic; font-weight: 700; }
+    .mc-logo { color: white; font-size: 16px; font-weight: 700; }
   }
 }
 
@@ -113,10 +75,14 @@
 }
 
 .input-item {
-  background: #f8f9fa;
+  --background: #f8f9fa;
+  --color: #1a1a2e;
+  --placeholder-color: #999;
+  --border-radius: 12px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
   border-radius: 12px;
   margin-bottom: 12px;
-  --background: transparent;
 
   ion-icon {
     color: #888;
@@ -127,10 +93,7 @@
 .row-inputs {
   display: flex;
   gap: 12px;
-
-  .half {
-    flex: 1;
-  }
+  .half { flex: 1; }
 }
 
 .error-msg {

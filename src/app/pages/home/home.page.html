@@ -68,5 +68,29 @@
       </div>
     </div>
   </div>
+  <!-- Transacciones recientes -->
+  <div class="section">
+  <div class="section-header">
+    <h3>Transacciones Recientes</h3>
+  </div>
+
+  <div class="empty-state" *ngIf="transacciones.length === 0">
+    <ion-icon name="receipt-outline"></ion-icon>
+    <p>No hay transacciones aún</p>
+  </div>
+
+  <div class="transaction-list" *ngIf="transacciones.length > 0">
+    <div class="transaction-item" *ngFor="let tx of transacciones">
+      <div class="tx-icon">
+        <ion-icon name="storefront-outline"></ion-icon>
+      </div>
+      <div class="tx-info">
+        <span class="tx-merchant">{{ tx.merchant }}</span>
+        <span class="tx-date">{{ formatFecha(tx.date) }}</span>
+      </div>
+      <span class="tx-amount">-${{ tx.amount.toLocaleString() }}</span>
+    </div>
+  </div>
+</div>
 
 </ion-content>

@@ -148,4 +148,110 @@
     font-size: 12px;
     opacity: 0.7;
   }
+ .transaction-list {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  gap: 12px;
+  background: white;
+  border-bottom: 1px solid #f0f2f5;
+  cursor: pointer;
+
+  &:last-child {
+    border-bottom: none;
+    border-radius: 0 0 16px 16px;
+  }
+
+  &:first-child {
+    border-radius: 16px 16px 0 0;
+  }
+
+  .tx-icon {
+    width: 44px;
+    height: 44px;
+    background: #f0eeff;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 20px;
+      color: #7c3aed;
+    }
+  }
+
+  .tx-info {
+    flex: 1;
+
+    .tx-merchant {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e !important;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+
+    .tx-date {
+      font-size: 12px;
+      color: #999 !important;
+      display: block;
+      margin-top: 2px;
+    }
+  }
+
+  .tx-amount {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e94560 !important;
+    white-space: nowrap;
+  }
+}
+:host {
+  --ion-background-color: #f0f2f5;
+}
+
+.home-content {
+  --background: #f0f2f5;
+}
+.transaction-item {
+  background: white !important;
+
+  .tx-merchant {
+    color: #1a1a2e !important;
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+  }
+
+  .tx-date {
+    color: #999 !important;
+    font-size: 12px;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .tx-amount {
+    color: #e94560 !important;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .tx-icon {
+    background: #f0eeff !important;
+    ion-icon {
+      color: #7c3aed !important;
+    }
+  }
+}
 }
