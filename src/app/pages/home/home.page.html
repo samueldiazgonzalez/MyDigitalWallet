@@ -45,6 +45,7 @@
     </div>
   </div>
 
+  <!-- Mis Tarjetas -->
   <div class="section">
     <div class="section-header">
       <h3>Mis Tarjetas</h3>
@@ -58,39 +59,102 @@
     </div>
 
     <div class="card-list" *ngIf="tarjetas.length > 0">
-      <div class="mini-card" *ngFor="let card of tarjetas" [ngClass]="card.franquicia">
-        <div class="mini-card-top">
-          <span>{{ card.franquicia | uppercase }}</span>
-          <ion-icon name="card-outline"></ion-icon>
+      <div
+        class="flip-card"
+        *ngFor="let card of tarjetas"
+        [class.flipped]="cardFlipped[card.id]"
+        (click)="toggleCard(card.id)">
+
+        <!-- Frente -->
+        <div class="flip-card-front" [ngClass]="card.franquicia">
+          <div class="mini-card-top">
+            <span>{{ card.franquicia | uppercase }}</span>
+            <ion-icon name="wifi-outline"></ion-icon>
+          </div>
+          <div class="mini-card-number">•••• {{ card.numero.slice(-4) }}</div>
+          <div class="mini-card-holder">{{ card.titular }}</div>
+          <div class="franchise-badge">
+            <span *ngIf="card.franquicia === 'visa'" class="visa-text">VISA</span>
+            <span *ngIf="card.franquicia === 'mastercard'" class="mc-circles">
+              <span class="mc-left"></span>
+              <span class="mc-right"></span>
+            </span>
+          </div>
         </div>
-        <div class="mini-card-number">•••• {{ card.numero.slice(-4) }}</div>
-        <div class="mini-card-holder">{{ card.titular }}</div>
+
+        <!-- Reverso -->
+        <div class="flip-card-back" [ngClass]="card.franquicia">
+          <div class="card-stripe"></div>
+          <div class="card-info-back">
+            <div class="card-number-full">{{ card.numero }}</div>
+            <div class="card-row">
+              <div>
+                <span class="back-label">Titular</span>
+                <span class="back-value">{{ card.titular }}</span>
+              </div>
+              <div>
+                <span class="back-label">Expira</span>
+                <span class="back-value">{{ card.expiracion }}</span>
+              </div>
+              <div>
+                <span class="back-label">CVV</span>
+                <span class="back-value">{{ card.cvv }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
   <!-- Transacciones recientes -->
   <div class="section">
-  <div class="section-header">
-    <h3>Transacciones Recientes</h3>
-  </div>
+    <div class="section-header">
+      <h3>Transacciones Recientes</h3>
+    </div>
 
-  <div class="empty-state" *ngIf="transacciones.length === 0">
-    <ion-icon name="receipt-outline"></ion-icon>
-    <p>No hay transacciones aún</p>
-  </div>
+    <div class="empty-state" *ngIf="transacciones.length === 0">
+      <ion-icon name="receipt-outline"></ion-icon>
+      <p>No hay transacciones aún</p>
+    </div>
 
-  <div class="transaction-list" *ngIf="transacciones.length > 0">
-    <div class="transaction-item" *ngFor="let tx of transacciones">
-      <div class="tx-icon">
-        <ion-icon name="storefront-outline"></ion-icon>
+    <div class="transaction-cards" *ngIf="transacciones.length > 0">
+      <div
+        class="transaction-card"
+        *ngFor="let tx of transacciones"
+        [class.selected]="transaccionSeleccionada?.id === tx.id">
+        <div class="card-content">
+          <div class="tx-emoji-section" (click)="onLongPress(tx)">
+            <div class="emoji-display">
+              <span *ngIf="tx.emoji" class="emoji">{{ tx.emoji }}</span>
+              <ion-icon *ngIf="!tx.emoji" name="storefront-outline" class="default-icon"></ion-icon>
+            </div>
+            <span class="emoji-hint" *ngIf="!tx.emoji">Toca para emoji</span>
+          </div>
+          <div class="tx-details">
+            <div class="tx-header">
+              <h4 class="tx-merchant">{{ tx.merchant }}</h4>
+              <span class="tx-amount">-${{ tx.amount.toLocaleString() }}</span>
+            </div>
+            <div class="tx-footer">
+              <span class="tx-date">{{ formatFecha(tx.date) }}</span>
+              <span class="tx-card" *ngIf="tx.cardId">Tarjeta</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="tx-info">
-        <span class="tx-merchant">{{ tx.merchant }}</span>
-        <span class="tx-date">{{ formatFecha(tx.date) }}</span>
-      </div>
-      <span class="tx-amount">-${{ tx.amount.toLocaleString() }}</span>
     </div>
   </div>
-</div>
+
+  <!-- Emoji Picker -->
+  <div class="emoji-overlay" *ngIf="mostrarEmojiPicker" (click)="cerrarEmoji()">
+    <div class="emoji-container" (click)="$event.stopPropagation()">
+      <emoji-mart
+        (emojiSelect)="seleccionarEmoji($event)"
+        [showPreview]="false"
+        title="Elige un emoji">
+      </emoji-mart>
+    </div>
+  </div>
 
 </ion-content>

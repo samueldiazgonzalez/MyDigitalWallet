@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Router } from '@angular/router';
 import { faker } from '@faker-js/faker';
+import { NotificationService } from '../../core/services/notification';
 import { ToastService } from '../../core/services/toast';
 
 @Component({
@@ -19,7 +20,6 @@ export class PaymentPage implements OnInit {
   amount = 0;
   loading = false;
   errorMsg = '';
-  successMsg = '';
   uid = '';
 
   private db: any;
@@ -28,9 +28,14 @@ export class PaymentPage implements OnInit {
     private afAuth: AngularFireAuth,
     private firestore: AngularFirestore,
     private toast: ToastService,
+    private notification: NotificationService,
     private router: Router
   ) {
     this.db = this.firestore.firestore;
+  }
+
+  async ionViewWillEnter() {
+    await this.notification.initPush();
   }
 
   ngOnInit() {
@@ -40,7 +45,6 @@ export class PaymentPage implements OnInit {
         return;
       }
       this.uid = user.uid;
-
       this.db.collection('cards')
         .where('uid', '==', user.uid)
         .onSnapshot((snap: any) => {
@@ -65,8 +69,8 @@ export class PaymentPage implements OnInit {
     }
     this.loading = true;
     this.errorMsg = '';
-    this.successMsg = '';
     try {
+      // Agregar la transacción a la base de datos
       await this.db.collection('transactions').add({
         cardId: this.tarjetaSeleccionada.id,
         merchant: this.merchant,
@@ -75,11 +79,50 @@ export class PaymentPage implements OnInit {
         uid: this.uid,
         emoji: ''
       });
+
+      // Mostrar toast de éxito
       await this.toast.showSuccess(
-  `Pago de $${this.amount.toLocaleString()} realizado exitosamente`
-);
-this.generarSimulacion();
+        `Pago de $${this.amount.toLocaleString()} realizado exitosamente`
+      );
+
+      // Enviar notificación (con pequeño delay para asegurar tokens)
+      try {
+        const status = this.notification.getStatus();
+        console.log('Estado de notificaciones:', status);
+        
+        if (status.conectado) {
+          await this.notification.enviarNotificacion(
+            'Pago Exitoso ✅',
+            `Has realizado un pago de $${this.amount.toLocaleString()} en ${this.merchant}`,
+            {
+              merchant: this.merchant,
+              amount: this.amount.toString(),
+              timestamp: new Date().toISOString()
+            }
+          );
+        } else {
+          console.warn('⚠️ Tokens no disponibles. Reintentando en 1s...');
+          // Reintentar después de 1 segundo
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          await this.notification.enviarNotificacion(
+            'Pago Exitoso ✅',
+            `Has realizado un pago de $${this.amount.toLocaleString()} en ${this.merchant}`,
+            {
+              merchant: this.merchant,
+              amount: this.amount.toString(),
+              timestamp: new Date().toISOString()
+            }
+          );
+        }
+      } catch (notificationError) {
+        console.error('⚠️ Error al enviar notificación (no crítico):', notificationError);
+        // No bloqueamos el pago si la notificación falla
+      }
+
+      // Generar nuevo pago simulado
+      this.generarSimulacion();
     } catch (error) {
+      console.error('Error al procesar el pago:', error);
       this.errorMsg = 'Error al procesar el pago';
     } finally {
       this.loading = false;

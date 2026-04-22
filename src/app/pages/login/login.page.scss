@@ -93,4 +93,18 @@
     --color: #e94560;
     font-weight: 600;
   }
+  .biometric-btn {
+  --border-radius: 12px;
+  --color: white;
+  --border-color: rgba(255,255,255,0.3);
+  margin-top: 12px;
+  height: 50px;
+}
+.google-btn {
+  --border-radius: 12px;
+  --color: white;
+  --border-color: rgba(255,255,255,0.3);
+  margin-top: 12px;
+  height: 50px;
+}
 }

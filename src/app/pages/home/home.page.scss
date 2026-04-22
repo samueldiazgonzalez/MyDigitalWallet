@@ -1,3 +1,7 @@
+:host {
+  --ion-background-color: #f0f2f5;
+}
+
 .home-content {
   --background: #f0f2f5;
 }
@@ -8,6 +12,7 @@
   border-radius: 20px;
   padding: 24px;
   color: white;
+  box-shadow: 0 8px 16px rgba(26, 26, 46, 0.2);
 
   .balance-header {
     display: flex;
@@ -15,12 +20,7 @@
     align-items: center;
     font-size: 14px;
     opacity: 0.8;
-
-    ion-button {
-      --color: white;
-      margin: 0;
-      height: 24px;
-    }
+    ion-button { --color: white; margin: 0; height: 24px; }
   }
 
   .balance-amount {
@@ -39,7 +39,7 @@
 .quick-actions {
   display: flex;
   justify-content: space-around;
-  padding: 8px 16px 16px;
+  padding: 8px 16px 24px;
 
   .action-btn {
     display: flex;
@@ -56,37 +56,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-
-      ion-icon {
-        font-size: 24px;
-        color: #e94560;
-      }
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      ion-icon { font-size: 24px; color: #e94560; }
     }
 
-    span {
-      font-size: 12px;
-      color: #666;
-      text-align: center;
-    }
+    span { font-size: 12px; color: #1a1a2e; font-weight: 500; }
   }
 }
 
 .section {
-  padding: 0 16px 16px;
+  padding: 0 16px 24px;
 
   .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
-
-    h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0;
-      color: #1a1a2e;
-    }
+    h3 { font-size: 18px; font-weight: 700; margin: 0; color: #1a1a2e; }
   }
 }
 
@@ -96,162 +82,232 @@
   padding: 32px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-
-  ion-icon {
-    font-size: 48px;
-    color: #ccc;
-  }
-
-  p {
-    color: #999;
-    margin: 8px 0;
-  }
+  ion-icon { font-size: 48px; color: #ccc; }
+  p { color: #999; margin: 8px 0; }
 }
 
+// TARJETAS CON FLIP
 .card-list {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
+  &::-webkit-scrollbar { display: none; }
 }
 
-.mini-card {
-  min-width: 160px;
+.flip-card {
+  min-width: 200px;
+  height: 120px;
+  perspective: 1000px;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 200px;
+  height: 120px;
   border-radius: 16px;
-  padding: 16px;
-  background: linear-gradient(135deg, #1a1a2e, #0f3460);
+  padding: 14px;
   color: white;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #333, #000);
 
-  &.visa {
-    background: linear-gradient(135deg, #1a1a6e, #0f3480);
-  }
+  &.visa { background: linear-gradient(135deg, #1a1a6e, #0f3480); }
+  &.mastercard { background: linear-gradient(135deg, #eb001b, #f5a623); }
+}
 
-  &.mastercard {
-    background: linear-gradient(135deg, #6e1a1a, #c0392b);
-  }
+.flip-card-front {
+  transform: rotateY(0deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   .mini-card-top {
     display: flex;
     justify-content: space-between;
     font-size: 11px;
-    opacity: 0.8;
-    margin-bottom: 12px;
+    font-weight: 600;
+    ion-icon { font-size: 16px; }
   }
 
   .mini-card-number {
-    font-size: 16px;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-align: center;
   }
 
   .mini-card-holder {
-    font-size: 12px;
-    opacity: 0.7;
+    font-size: 11px;
+    opacity: 0.8;
+    text-transform: uppercase;
   }
- .transaction-list {
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+
+  .franchise-badge {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+
+    .visa-text {
+      font-size: 18px;
+      font-style: italic;
+      font-weight: 800;
+      color: white;
+    }
+
+    .mc-circles {
+      display: flex;
+      .mc-left {
+        width: 22px;
+        height: 22px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 50%;
+      }
+      .mc-right {
+        width: 22px;
+        height: 22px;
+        background: rgba(255,220,0,0.9);
+        border-radius: 50%;
+        margin-left: -10px;
+      }
+    }
+  }
 }
 
-.transaction-item {
+.flip-card-back {
+  transform: rotateY(180deg);
   display: flex;
-  align-items: center;
-  padding: 14px 16px;
-  gap: 12px;
-  background: white;
-  border-bottom: 1px solid #f0f2f5;
-  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
 
-  &:last-child {
-    border-bottom: none;
-    border-radius: 0 0 16px 16px;
+  .card-stripe {
+    height: 28px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 4px;
+    margin: 0 -14px;
   }
 
-  &:first-child {
-    border-radius: 16px 16px 0 0;
-  }
-
-  .tx-icon {
-    width: 44px;
-    height: 44px;
-    background: #f0eeff;
-    border-radius: 14px;
+  .card-info-back {
+    flex: 1;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    flex-shrink: 0;
+    gap: 8px;
 
-    ion-icon {
-      font-size: 20px;
-      color: #7c3aed;
+    .card-number-full {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+
+      .back-label {
+        display: block;
+        font-size: 8px;
+        opacity: 0.6;
+        text-transform: uppercase;
+      }
+
+      .back-value {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.flip-card.flipped {
+  .flip-card-front { transform: rotateY(-180deg); }
+  .flip-card-back { transform: rotateY(0deg); }
+}
+
+// TRANSACCIONES
+.transaction-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.transaction-card {
+  background: white;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.02);
+  transition: all 0.2s ease;
+
+  &:active { transform: scale(0.98); }
+
+  .card-content {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .tx-emoji-section {
+    .emoji-display {
+      width: 52px;
+      height: 52px;
+      background: #f0eeff;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .emoji { font-size: 26px; }
+      .default-icon { font-size: 24px; color: #7c3aed; }
+    }
+    .emoji-hint {
+      font-size: 9px;
+      color: #9b8dc9;
+      text-align: center;
+      display: block;
+      margin-top: 4px;
     }
   }
 
-  .tx-info {
+  .tx-details {
     flex: 1;
 
-    .tx-merchant {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a1a2e !important;
-      display: block;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 180px;
+    .tx-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .tx-merchant { font-size: 15px; font-weight: 600; color: #1a1a2e; margin: 0; }
+      .tx-amount { font-size: 15px; font-weight: 700; color: #e94560; }
     }
 
-    .tx-date {
-      font-size: 12px;
-      color: #999 !important;
-      display: block;
-      margin-top: 2px;
-    }
-  }
-
-  .tx-amount {
-    font-size: 15px;
-    font-weight: 700;
-    color: #e94560 !important;
-    white-space: nowrap;
-  }
-}
-:host {
-  --ion-background-color: #f0f2f5;
-}
-
-.home-content {
-  --background: #f0f2f5;
-}
-.transaction-item {
-  background: white !important;
-
-  .tx-merchant {
-    color: #1a1a2e !important;
-    font-size: 14px;
-    font-weight: 600;
-    display: block;
-  }
-
-  .tx-date {
-    color: #999 !important;
-    font-size: 12px;
-    display: block;
-    margin-top: 2px;
-  }
-
-  .tx-amount {
-    color: #e94560 !important;
-    font-size: 15px;
-    font-weight: 700;
-  }
-
-  .tx-icon {
-    background: #f0eeff !important;
-    ion-icon {
-      color: #7c3aed !important;
+    .tx-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      .tx-date { font-size: 12px; color: #999; }
+      .tx-card { font-size: 10px; background: #f0f2f5; color: #666; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
     }
   }
 }
+
+.emoji-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.emoji-container {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 16px;
+  width: 100%;
 }

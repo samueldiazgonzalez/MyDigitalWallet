@@ -22,6 +22,19 @@ export class RegisterPage {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  ionViewWillEnter() {
+    // Limpiar el formulario cada vez que se entra a la vista
+    this.nombre = '';
+    this.apellido = '';
+    this.tipoDocumento = 'CC';
+    this.numeroDocumento = '';
+    this.pais = '';
+    this.email = '';
+    this.password = '';
+    this.errorMsg = '';
+    this.loading = false;
+  }
+
   async register() {
     if (!this.nombre || !this.apellido || !this.numeroDocumento || 
         !this.pais || !this.email || !this.password) {
